@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="DEBUG">
+    <!-- 로그를 어떤 방식으로 기록할 것인지 설정 (Console, File 등)    -->
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false">
+                <Pattern>%highlight{[%p] %d{HH:mm:ss} %n[%c - %M]: %m%n}</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!--  additivity=false => 같은 로그에 대해 중복 로그를 방지한다      -->
+        <!-- AppenderRef: 어떤 로그 설정을 따를 것인가 지정 -->
+        <Logger name="org.springframework" level="WARN" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Logger name="com.board" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <!-- 로깅 레벨을 설정 - FATAL / ERROR / WARN / INFO / DEBUG / TRACE    -->
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>
+<!-- %d: 이벤트 발생 시각           -->
+<!-- %HH:mm:ss: 시, 분, 초           -->
+<!-- %m: 로그 메세지           -->
+<!-- %M: 로그가 발생한 메서드 명           -->
+<!-- %c: 로그가 발생한 클래스 명           -->
+<!-- %n: 줄바꿈           -->
