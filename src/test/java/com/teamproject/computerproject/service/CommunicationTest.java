@@ -32,6 +32,6 @@ public class CommunicationTest {
 
 
 //        log.info(result.substring(18,25));
-        log.info(result.toString());
+//        log.info(result.toString());
     }
 }
