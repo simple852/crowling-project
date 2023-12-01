@@ -32,6 +32,7 @@ public class FCMConfig {
         } else {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
+                    .setDatabaseUrl("https://notificationproject-ed6d7-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .build();
 
             firebaseApp = FirebaseApp.initializeApp(options);

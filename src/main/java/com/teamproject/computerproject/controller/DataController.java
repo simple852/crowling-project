@@ -19,7 +19,9 @@ public class DataController {
     @GetMapping("/jsoup")
     public List<String> test(){
 
+        //가져올 상품주소
         String url = "https://prod.danawa.com/info/?pcode=19627808&cate=112747&adinflow=Y";
+        //상품 주소 html소스안의 css class 이름
         String parameter = "prc_c";
         return  communicationService.getDatas(url, parameter);
 
