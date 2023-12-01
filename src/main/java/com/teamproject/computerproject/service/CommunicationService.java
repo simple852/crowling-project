@@ -1,8 +1,10 @@
 package com.teamproject.computerproject.service;
 
 import com.teamproject.computerproject.domain.Item;
+import com.teamproject.computerproject.domain.ItemImage;
 import com.teamproject.computerproject.dto.ItemDto;
 import com.teamproject.computerproject.dto.request.ParameterDto;
+import com.teamproject.computerproject.repositery.CategoryRepository;
 import com.teamproject.computerproject.repositery.ItemImageRepository;
 import com.teamproject.computerproject.repositery.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,8 +29,9 @@ import java.util.stream.Collectors;
 public class CommunicationService {
     private final ModelMapper modelMapper;
     private final ItemRepository itemRepository;
+    private final ItemImageRepository itemImageRepository;
+    private final CategoryRepository categoryRepository;
 
-    //내용 반환 하는 메서드
     public List<String> getDatas(ParameterDto parameter){
       
         List<String> list = getItemAddress(parameter.getCategoryId());
@@ -34,9 +39,6 @@ public class CommunicationService {
         return  getJsoupElements(list,parameter);
     }
 
-
-    //jsoup 크롤링 커넥션 반환
-    // 가져올 웹페이지 url 전달
     public Connection getJsoupConnection(String url){
         if(url == null){
             url = "http://localhost:8080/";
@@ -46,15 +48,12 @@ public class CommunicationService {
     }
 
 
-    //db에서 카테고리별 상품 주소를 가져온다
-    //주소를 반환한다.
     public List<String> getItemAddress(Integer categoryId){
         List<String> list = new ArrayList<>();
         List<ItemDto> dataList =  itemRepository.findByCategoryId(categoryId)
                 .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                 .toList();
 
-        log.info("db 조회"+ dataList.toString());
         for (ItemDto data:dataList) {
             list.add(data.getItemAddress());
         }
@@ -70,16 +69,21 @@ public class CommunicationService {
         List<Connection> conn = new ArrayList<>();
         List<ItemDto> saveList = new ArrayList<>();
         List<String> nodes = new ArrayList<>();
+
+
+
         for (int i = 0; i < url.size(); i++) {
             conn.add(getJsoupConnection(url.get(i)));
+            log.info(url.get(i));
         }
 
         try{
                 conn.parallelStream().forEach(item->{
-                    String title = null;
-                    String content = null;
-                    String price = null;
-                    String address = null;
+                    String title = "";
+                    String content = "";
+                    String price = "";
+                    String address = "";
+                    String image = null;
                     try {
                         title = item.get().select(parameter.getTitleClass()).text();
                     } catch (IOException e){
@@ -100,6 +104,11 @@ public class CommunicationService {
                     } catch (IOException e) {
                         log.info("uri 에러" + e);
                     }
+                    try {
+                        image =item.get().getElementById(parameter.getImageClass()).attr("src");
+                    } catch (IOException e) {
+                        log.info("이미지 에러" + e);
+                    }
                     String[] sortValue = price.split(" ");
                     price = sortValue[0].replace(",","");
                     Arrays.sort(sortValue);
@@ -107,6 +116,7 @@ public class CommunicationService {
                     log.info("상품설명 : "+content);
                     log.info("상품가격 : "+price);
                     log.info("상품주소 : "+ address);
+                    log.info("상품이미지 : "+ image);
                     log.info("***********************************");
 
 
@@ -115,18 +125,21 @@ public class CommunicationService {
                     itemDto.setItemPrice(Integer.parseInt(price));
                     itemDto.setItemContent(content);
                     itemDto.setItemAddress(address);
+                    itemDto.setItemImage(image);
+
 
                     saveList.add(itemDto);
                 });
 
-                log.info("업데이트 리스트"+saveList.toString());
            List<Item>  result =  saveList.stream().map((element) -> modelMapper.map(element, Item.class)).toList();
-
            result.parallelStream().forEach(data->{
-               itemRepository.updateItemNameAndItemPriceAndItemContentByItemAddress(data.getItemName(),data.getItemPrice(),data.getItemContent(), data.getItemAddress());
+               log.info("db 넣기전"+data.getItemImage());
+               itemRepository.updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(data.getItemName(), data.getItemPrice(), data.getItemContent(), data.getItemImage(), data.getItemAddress());
            });
 
 
+            LocalDateTime timestamp = LocalDateTime.now();
+            categoryRepository.updateUpdateTimeById(timestamp, parameter.getCategoryId());
             return nodes;
 
         }catch (Exception e){

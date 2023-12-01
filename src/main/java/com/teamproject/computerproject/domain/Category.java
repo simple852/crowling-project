@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Category {
     private String categoryName;
 
     @Column(name = "update_time")
-    private Instant updateTime;
+    private LocalDateTime updateTime;
 
     @OneToMany(mappedBy = "category")
     private List<Item> items = new ArrayList<>();

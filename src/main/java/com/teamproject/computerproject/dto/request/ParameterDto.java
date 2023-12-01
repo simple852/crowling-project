@@ -11,5 +11,6 @@ public class ParameterDto {
     private String titleClass;
     private String contentClass;
     private String priceClass;
+    private String imageClass;
     private Integer categoryId;
 }

@@ -34,14 +34,18 @@ public class Item {
     @Column(name="item_address")
     private String itemAddress;
 
+    @Column(name="item_image")
+    private String itemImage;
+
+
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "category_id",insertable = false,updatable = false)
     private Category category;
 
 
 
-
-    @OneToMany(mappedBy = "item")
-    private List<ItemImage> itemImages = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "item")
+//    private List<ItemImage> itemImages = new ArrayList<>();
 
 }

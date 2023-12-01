@@ -18,10 +18,7 @@ public class DataController {
     @PostMapping("/jsoup")
     public List<String> test(@RequestBody  ParameterDto parameter){
 
-
         return  communicationService.getDatas(parameter );
-
-
     }
 
 
