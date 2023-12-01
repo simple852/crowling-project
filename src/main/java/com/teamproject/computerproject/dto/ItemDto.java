@@ -19,5 +19,6 @@ public class ItemDto implements Serializable {
     String itemName;
     Integer itemPrice;
     String itemContent;
+    String itemAddress;
     List<ItemImageDto> imageList;
 }
