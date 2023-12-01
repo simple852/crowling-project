@@ -14,6 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemImageDto implements Serializable {
-    Integer id;
+    Integer itemId;
     String imageAddress;
 }

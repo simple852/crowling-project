@@ -3,6 +3,8 @@ package com.teamproject.computerproject.service;
 
 import com.teamproject.computerproject.domain.Item;
 import com.teamproject.computerproject.dto.ItemDto;
+import com.teamproject.computerproject.dto.request.ParameterDto;
+import com.teamproject.computerproject.dto.request.RequestItemDto;
 import com.teamproject.computerproject.repositery.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ public class ItemService {
 
 
 
-    public void saveItem(ItemDto itemDto){
+    public void saveItem(RequestItemDto itemDto){
 
         itemRepository.save(modelMapper.map(itemDto, Item.class));
 
@@ -27,4 +29,7 @@ public class ItemService {
     }
 
 
+    public void deleteItem(Integer itemId) {
+        itemRepository.deleteById(itemId);
+    }
 }

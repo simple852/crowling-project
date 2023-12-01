@@ -13,10 +13,24 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Transactional
     @Modifying
-    @Query("update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3 where i.itemAddress = ?4")
-    int updateItemNameAndItemPriceAndItemContentByItemAddress(String itemName, Integer itemPrice, String itemContent, String itemAddress);
+    @Query("""
+            update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3, i.itemImage = ?4
+            where i.itemAddress = ?5""")
+    int updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(String itemName, Integer itemPrice, String itemContent, String itemImage, String itemAddress);
+    @Transactional
+    @Modifying
+    @Query("update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3 , i.itemImage = ?4 where i.itemAddress = ?4")
+    int updateItemNameAndItemPriceAndItemContentByItemAddress(String itemName, Integer itemPrice, String itemContent,String itemImage, String itemAddress);
     List<Item> findByCategoryId(Integer categoryId);
 
 
 
 }
+
+//{
+//        "titleClass": "span.title",
+//        "contentClass": "u",
+//        "priceClass": "em.prc_c",
+//        "categoryId": 2,
+//        "imageClass": "baseImage"
+//        }
