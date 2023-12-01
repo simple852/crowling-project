@@ -2,6 +2,7 @@ package com.teamproject.computerproject.service;
 
 
 import com.teamproject.computerproject.controller.DataController;
+import com.teamproject.computerproject.repositery.ItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.DisplayName;
@@ -19,19 +20,6 @@ public class CommunicationTest {
     private  DataController dataController;
     @Autowired
     private  CommunicationService communicationService;
+    private ItemRepository itemRepository;
 
 
-    @Test
-    @DisplayName("크롤링 테스트")
-    public void test() {
-
-        String url = "https://prod.danawa.com/info/?pcode=19627808&cate=112747&adinflow=Y";
-//        String parameter = "span.title"; //단일 상품 이름 가져오는 파라미터
-        String parameter = "em.prc_c";
-        List<String> result =  communicationService.getDatas(url,parameter);
-
-
-//        log.info(result.substring(18,25));
-//        log.info(result.toString());
-    }
-}

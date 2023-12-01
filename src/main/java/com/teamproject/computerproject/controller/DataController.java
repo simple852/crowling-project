@@ -1,12 +1,11 @@
 package com.teamproject.computerproject.controller;
 
 
+import com.teamproject.computerproject.dto.request.ParameterDto;
 import com.teamproject.computerproject.service.CommunicationService;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.select.Elements;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,12 +15,11 @@ import java.util.List;
 public class DataController {
     private final CommunicationService communicationService;
 
-    @GetMapping("/jsoup")
-    public List<String> test(){
+    @PostMapping("/jsoup")
+    public List<String> test(@RequestBody  ParameterDto parameter){
 
-        String url = "https://prod.danawa.com/info/?pcode=19627808&cate=112747&adinflow=Y";
-        String parameter = "prc_c";
-        return  communicationService.getDatas(url, parameter);
+
+        return  communicationService.getDatas(parameter );
 
 
     }

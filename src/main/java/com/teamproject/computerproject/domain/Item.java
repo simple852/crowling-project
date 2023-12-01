@@ -28,9 +28,18 @@ public class Item {
     @Column(name = "item_content", length = 45)
     private String itemContent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @Column(name ="category_id")
+    private Integer categoryId;
+
+    @Column(name="item_address")
+    private String itemAddress;
+
+    @ManyToOne(fetch = FetchType.LAZY )
+    @JoinColumn(name = "category_id",insertable = false,updatable = false)
     private Category category;
+
+
+
 
     @OneToMany(mappedBy = "item")
     private List<ItemImage> itemImages = new ArrayList<>();
