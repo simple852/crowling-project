@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to right, #efefef, #e0ffff, #affafa, #9bfafa);
+    }
+    form{
+
+        width: 800px;
+        height: 500px;
+        margin: 0 auto;
+        padding: 0;
+        display: flex;
+        transform: translate(0, 30%);
+        background-color: white;
+
+        border-radius: 10%;
+        box-shadow: 4px 4px 2px #8f8f8f;
+        overflow: hidden;
+
+    }
+    .login_con{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid rgba(0,0,0,0.2);
+    }
+    .login_con input{
+        width: 100%;
+        height: 25px;
+    }
+    .login_btn_con{
+        width: 100%;
+        height: 25px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+    }
+    .login_btn_con > button{
+        width:100px;
+        height: 30px;
+    }
+    .sns_con{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<body>
+<div>
+    <main>
+        <form action="/main/" method="post">
+            <div class="login_con">
+                <label>ID : <input type="text"></label><br>
+                <label>PW : <input type="text"></label><br>
+                <div class="login_btn_con">
+                    <button>로그인</button>
+                    <button>회원가입</button>
+                </div>
+            </div>
+            <div class="sns_con">
+                <button>sns 로그인</button><br>
+                <button>sns 로그인</button>
+            </div>
+        </form>
+    </main>
+</div>
+
+</body>
+</html>
+<script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
+<script>
+    //초기화 구독 알림이 뜬다
+    //나중에 로그인후 로 다른페이지에 넣을 예정
+
+    FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
+
+    FlareLane.getIsSubscribed((isSubscribed) => {
+        //구독이 안되있으면
+        if(!isSubscribed){
+            //디바이스 아이디 를 가져오고 db에 저장
+            //
+            FlareLane.getDeviceId((deviceId) => {
+                console.log(deviceId);
+            });
+        }
+    });
+
+</script>
