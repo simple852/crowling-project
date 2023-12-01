@@ -20,7 +20,7 @@ public class ItemController {
     @PostMapping("/item")
     public void saveItem(ItemDto itemDto){
 
-//        itemService
+        itemService.saveItem(itemDto);
     }
 
 

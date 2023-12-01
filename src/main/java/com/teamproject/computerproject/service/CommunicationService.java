@@ -34,6 +34,7 @@ public class CommunicationService {
         return  getJsoupElements(list,parameter);
     }
 
+
     //jsoup 크롤링 커넥션 반환
     // 가져올 웹페이지 url 전달
     public Connection getJsoupConnection(String url){
@@ -43,6 +44,8 @@ public class CommunicationService {
         return Jsoup.connect(url);
 
     }
+
+
     //db에서 카테고리별 상품 주소를 가져온다
     //주소를 반환한다.
     public List<String> getItemAddress(Integer categoryId){
