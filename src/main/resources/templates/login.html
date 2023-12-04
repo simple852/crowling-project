@@ -79,24 +79,3 @@
 
 </body>
 </html>
-<script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
-
-
-<script>
-    //초기화 구독 알림이 뜬다
-    //나중에 로그인후 로 다른페이지에 넣을 예정
-
-    FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
-
-    FlareLane.getIsSubscribed((isSubscribed) => {
-        //구독이 안되있으면
-        if(!isSubscribed){
-            //디바이스 아이디 를 가져오고 db에 저장
-            //
-            FlareLane.getDeviceId((deviceId) => {
-                console.log(deviceId);
-            });
-        }
-    });
-
-</script>
