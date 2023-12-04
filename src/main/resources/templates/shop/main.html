@@ -15,11 +15,15 @@
         padding: 0;
     }
     header{
-        width: 80%;
+        width: 1200px;
         height: 50px;
         margin: 0 auto;
         display: flex;
         justify-content: right;
+    }
+    #refresh_btn,#sub_btn:hover{
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.2);
     }
     header>i{
         font-size: 2rem;
@@ -27,13 +31,13 @@
         margin-left: 20px;
     }
     footer{
-        width: 80%;
+        width: 1200px;
         height: 50px;
         margin: 0 auto;
     }
 
     main{
-        width: 80%;
+        width: 1200px;
         margin: 0 auto;
     }
     table{
@@ -57,7 +61,8 @@
         word-break:break-all;
     }
     .item_img_con{
-        width: 10%;
+        width: 100px;
+        height: 100px;
     }
     .item_img_con>img{
         width: 100%;
@@ -78,7 +83,7 @@
             <option value="3">종류3</option>
             <option value="4">종류4</option>
         </select>
-        <i class="fa-solid fa-arrows-rotate"></i>
+        <i id="refresh_btn" class="fa-solid fa-arrows-rotate"></i>
         <i id="sub_btn" class="fa-regular fa-bell"></i>
     </header>
     <main>
