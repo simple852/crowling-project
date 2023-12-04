@@ -32,6 +32,15 @@ public class CommunicationService {
     private final ItemImageRepository itemImageRepository;
     private final CategoryRepository categoryRepository;
 
+    String titleClass = "span.title";
+    String contentClass= "u";
+    String priceClass="em.prc_c";
+    String imageClass="baseImage";
+
+
+
+
+
     public List<String> getDatas(ParameterDto parameter){
       
         List<String> list = getItemAddress(parameter.getCategoryId());
@@ -50,7 +59,7 @@ public class CommunicationService {
 
     public List<String> getItemAddress(Integer categoryId){
         List<String> list = new ArrayList<>();
-        List<ItemDto> dataList =  itemRepository.findByCategoryId(categoryId)
+        List<ItemDto> dataList =  itemRepository .findByCategoryId(categoryId)
                 .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                 .toList();
 
@@ -85,17 +94,17 @@ public class CommunicationService {
                     String address = "";
                     String image = null;
                     try {
-                        title = item.get().select(parameter.getTitleClass()).text();
+                        title = item.get().select(titleClass).text();
                     } catch (IOException e){
                         log.info("상품명 에러" + e);
                     }
                     try {
-                        content = item.get().select(parameter.getContentClass()).text();
+                        content = item.get().select(contentClass).text();
                     } catch (IOException e) {
                         log.info("컨텐츠 에러" + e);
                     }
                     try {
-                        price = item.get().select(parameter.getPriceClass()).text();
+                        price = item.get().select(priceClass).text();
                     } catch (IOException e) {
                         log.info("가격 에러" + e);
                     }
@@ -105,7 +114,7 @@ public class CommunicationService {
                         log.info("uri 에러" + e);
                     }
                     try {
-                        image =item.get().getElementById(parameter.getImageClass()).attr("src");
+                        image = Objects.requireNonNull(item.get().getElementById(imageClass)).attr("src");
                     } catch (IOException e) {
                         log.info("이미지 에러" + e);
                     }
@@ -136,6 +145,7 @@ public class CommunicationService {
                log.info("db 넣기전"+data.getItemImage());
                itemRepository.updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(data.getItemName(), data.getItemPrice(), data.getItemContent(), data.getItemImage(), data.getItemAddress());
            });
+
 
 
             LocalDateTime timestamp = LocalDateTime.now();
