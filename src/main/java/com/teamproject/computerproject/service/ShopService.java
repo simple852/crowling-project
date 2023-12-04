@@ -21,6 +21,7 @@ public class ShopService {
     public List<ItemDto> getItems(Integer categoryId, Pageable page) {
         List<ItemDto> dataList = new ArrayList<>();
         if(categoryId == 0){
+
             dataList =  itemRepository.findAll(page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
