@@ -136,6 +136,7 @@
             document.getElementById("sub_btn").className = isSubscribed?"fa-regular fa-bell":"fa-regular fa-bell-slash";
         });
         $.ajax({
+
             type : "POST",
             url : "/shop/getItems",
             success : function(res){
