@@ -1,28 +1,31 @@
 package com.teamproject.computerproject.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * DTO for {@link com.teamproject.computerproject.domain.Item}
+ * DTO for {@link com.teamproject.computerproject.domain.BackupDatum}
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ItemDto implements Serializable {
+@AllArgsConstructor
+public class BackupDatumDto implements Serializable {
+//    Integer id;
+
+
     Integer id;
-    Long totalItemCount;
+    @Size(max = 255)
     String itemName;
     Integer itemPrice;
     String itemContent;
+    Integer categoryId;
+    @Size(max = 255)
     String itemAddress;
+    @Size(max = 255)
     String itemImage;
-
-    Integer itemGap;
-//    List<ItemImageDto> imageList;
 }

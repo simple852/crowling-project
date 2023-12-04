@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Transactional
     @Modifying
+    @Query("update Category c set c.updateTime = ?1")
+    int updateUpdateTimeBy(LocalDateTime updateTime);
+    @Transactional
+    @Modifying
     @Query("update Category c set c.updateTime = ?1 where c.id = ?2")
     void updateUpdateTimeById(LocalDateTime updateTime, Integer id);
 }

@@ -3,6 +3,7 @@ package com.teamproject.computerproject.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.relational.core.sql.In;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -42,6 +43,8 @@ public class Item {
     @JoinColumn(name = "category_id",insertable = false,updatable = false)
     private Category category;
 
+    @Column(name="item_gap")
+    private Integer itemGap;
 
 
 //

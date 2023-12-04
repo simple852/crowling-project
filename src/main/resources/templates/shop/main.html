@@ -92,6 +92,7 @@
         <option value="4">그래픽카드(VGA)</option>
         <option value="5">SSD</option>
     </select>
+    <input th:value="${session.sessionId}" type="hidden" id ="sessionId">
     <i id="refresh_btn" class="fa-solid fa-arrows-rotate"></i>
     <i id="sub_btn" class="fa-regular fa-bell"></i>
 </header>
@@ -110,14 +111,38 @@
     </table>
 </main>
 <footer>
-
+    <button id="test">test</button>
+    <!--    <th:block th:each="i: ${#numbers.sequence(0, totalNumber)}">-->
+    <!--        <a th:text="${i}"></a>-->
+    <!--    </th:block>-->
 </footer>
 </body>
 </html>
 <script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
 <script>
+
+
+    console.log($("#sessionId").val())
+    FlareLane.setUserId($("#sessionId").val());
+
     FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
     setInterval( reFreshItem(),60000);
+
+    $("#test").click(()=>{
+        $.ajax({
+            type : "POST",
+            url : "/shop/test",
+            success : function(res){
+                console.log(res)
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                alert("통신 실패.")
+            }
+        });
+    });
+    $("#category").change(()=>
+        reFreshItem()
+    );
     $("#category").change(()=>reFreshItem());
 
     //구독 버튼 클릭 이벤트
@@ -155,7 +180,6 @@
             success : function(res){
                 $(".item_list").empty();
                 res.forEach(item => {
-                    console.log(item)
                     var $itemBox = $(
                         '<tr class="item">\n' +
                         '<td class="item_img_con">\n' +
@@ -170,20 +194,6 @@
                         '</tr>');
                     $(".item_list").append($itemBox);
                 });
-            },
-            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
-                alert("통신 실패.")
-            }
-        });
-
-        $.ajax({
-            type : "GET",
-            data:{
-                category : $("#category").val()
-            },
-            url : "/shop/getItems",
-            success : function(res){
-
             },
             error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                 alert("통신 실패.")

@@ -4,11 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.teamproject.computerproject.dto.UserDto;
+import com.teamproject.computerproject.dto.request.NotificationDto;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 @Service
 public class NotificationService {
@@ -22,21 +24,32 @@ public class NotificationService {
     private final int connTimeout = 5000;
     private final int readTimeout = 3000;
 
-    public void send_notification(String title,String body,String itemUrl,String imageUrl)//(String title,String body,ItemDto itemDto)
+    public void send_notification(NotificationDto notificationDto)//(String title,String body,ItemDto itemDto)
     {
         //나중에 itemDto로 변경하기
 
         JsonObject jsonObject = new JsonObject();
         JsonArray targetIdsArray = new JsonArray();
+        //세그먼트 구독된 모든 기기에 전송할때
+//        jsonObject.addProperty("targetType", "segment");
+//        targetIdsArray.add("9d1ccc8c-e7e4-439b-bf2e-cb0ffafcffb9");
+        //특정 기기에 전송할때
+//        jsonObject.addProperty("targetType", "device");
 
-        jsonObject.addProperty("targetType", "device");
-        targetIdsArray.add("38bc2c65-9fda-4ed7-8417-7953424d7fe4");
+        if(!notificationDto.getToken().isEmpty() && !Objects.equals(notificationDto.getUserId(), "userId")){
+            jsonObject.addProperty("targetType", notificationDto.getType());
+            targetIdsArray.add(notificationDto.getToken());
+        }else{
+            jsonObject.addProperty("targetType", "userId");
+            targetIdsArray.add(notificationDto.getUserId());
+        }
+
+
         jsonObject.add("targetIds", targetIdsArray);
 
-        jsonObject.addProperty("url", itemUrl);
-        jsonObject.addProperty("imageUrl", imageUrl);
-        jsonObject.addProperty("title", title);
-        jsonObject.addProperty("body", body);
+        jsonObject.addProperty("url", notificationDto.getItemUrl());
+        jsonObject.addProperty("title", notificationDto.getTitle());
+        jsonObject.addProperty("body", notificationDto.getBody());
 
         String sendData = jsonObject.toString();
         String apiUrl = "https://api.flarelane.com/v1/projects/a8b75707-136f-4fc3-ab47-57801d352e5f/notifications";

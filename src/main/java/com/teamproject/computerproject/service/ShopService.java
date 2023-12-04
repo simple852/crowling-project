@@ -19,7 +19,7 @@ public class ShopService {
     private final ModelMapper modelMapper;
 
     public List<ItemDto> getItems(Integer categoryId, Pageable page) {
-        List<ItemDto> dataList = new ArrayList<>();
+        List<ItemDto> dataList;
         Long count ;
         if(categoryId == 0){
             count = totalCountItem(categoryId);
@@ -33,6 +33,8 @@ public class ShopService {
             dataList =  itemRepository.findByCategoryIdOrderById(categoryId, page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
+
+
             dataList.get(0).setTotalItemCount(count);
         }
         return dataList;
