@@ -2,6 +2,7 @@ package com.teamproject.computerproject.controller;
 
 import com.teamproject.computerproject.dto.UserDto;
 import com.teamproject.computerproject.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -16,9 +17,11 @@ public class MemberController {
 
 
     @PostMapping("/login")
-    public String loginMember(@RequestParam("memberId") String memberId, @RequestParam("memberPw") String memberPw)
+    public String loginMember(@RequestParam("memberId") String memberId, @RequestParam("memberPw") String memberPw, HttpSession httpSession)
     {
        if(memberService.login(memberId,memberPw)){
+           httpSession.setAttribute("sessionId",memberId);
+           log.info(httpSession.getAttribute("sessionId"));
             return "shop/main";
        }else{
            return "redirect:/main";

@@ -29,9 +29,14 @@ public class NotificationService {
         JsonObject jsonObject = new JsonObject();
         JsonArray targetIdsArray = new JsonArray();
 
+        //디바이스만
         jsonObject.addProperty("targetType", "device");
         targetIdsArray.add("38bc2c65-9fda-4ed7-8417-7953424d7fe4");
         jsonObject.add("targetIds", targetIdsArray);
+
+
+
+
 
         jsonObject.addProperty("url", itemUrl);
         jsonObject.addProperty("imageUrl", imageUrl);
