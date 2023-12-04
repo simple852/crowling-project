@@ -28,9 +28,12 @@ public class NotificationService {
 
         JsonObject jsonObject = new JsonObject();
         JsonArray targetIdsArray = new JsonArray();
-
+        //세그먼트 구독된 모든 기기에 전송할때
+//        jsonObject.addProperty("targetType", "segment");
+//        targetIdsArray.add("9d1ccc8c-e7e4-439b-bf2e-cb0ffafcffb9");
         jsonObject.addProperty("targetType", "device");
         targetIdsArray.add("38bc2c65-9fda-4ed7-8417-7953424d7fe4");
+        
         jsonObject.add("targetIds", targetIdsArray);
 
         jsonObject.addProperty("url", itemUrl);
