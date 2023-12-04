@@ -41,11 +41,11 @@ public class CommunicationService {
 
 
 
-    public List<String> getDatas(ParameterDto parameter){
+    public List<String> getDatas(Integer category){
       
-        List<String> list = getItemAddress(parameter.getCategoryId());
+        List<String> list = getItemAddress(category);
 
-        return  getJsoupElements(list,parameter);
+        return  getJsoupElements(list,category);
     }
 
     public Connection getJsoupConnection(String url){
@@ -73,7 +73,7 @@ public class CommunicationService {
 
 
     //검색할 element와 url을 가져온다.
-    public List<String> getJsoupElements(List<String> url, ParameterDto parameter ){
+    public List<String> getJsoupElements(List<String> url, Integer category ){
 
         List<Connection> conn = new ArrayList<>();
         List<ItemDto> saveList = new ArrayList<>();
@@ -149,7 +149,7 @@ public class CommunicationService {
 
 
             LocalDateTime timestamp = LocalDateTime.now();
-            categoryRepository.updateUpdateTimeById(timestamp, parameter.getCategoryId());
+            categoryRepository.updateUpdateTimeById(timestamp,category);
             return nodes;
 
         }catch (Exception e){
