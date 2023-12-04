@@ -20,21 +20,32 @@ public class ShopService {
 
     public List<ItemDto> getItems(Integer categoryId, Pageable page) {
         List<ItemDto> dataList = new ArrayList<>();
+        Long count ;
         if(categoryId == 0){
-
+            count = totalCountItem(categoryId);
             dataList =  itemRepository.findAll(page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
+            dataList.get(0).setTotalItemCount(count);
+
         }else{
+            count = totalCountItem(categoryId);
             dataList =  itemRepository.findByCategoryIdOrderById(categoryId, page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
+            dataList.get(0).setTotalItemCount(count);
         }
-
-
         return dataList;
     }
 
+    public Long totalCountItem(Integer categoryId){
+        if(categoryId == 0){
+          return   itemRepository.count();
+        }else{
+            return itemRepository.countByCategoryId(categoryId);
+
+        }
+    }
 
 
 

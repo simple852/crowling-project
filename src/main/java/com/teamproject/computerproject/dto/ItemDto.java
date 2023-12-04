@@ -16,11 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ItemDto implements Serializable {
     Integer id;
+    Long totalItemCount;
     String itemName;
     Integer itemPrice;
     String itemContent;
     String itemAddress;
-     String itemImage;
+    String itemImage;
 
 //    List<ItemImageDto> imageList;
 }

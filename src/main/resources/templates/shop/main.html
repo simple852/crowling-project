@@ -21,7 +21,11 @@
         display: flex;
         justify-content: right;
     }
-    #refresh_btn,#sub_btn:hover{
+    #refresh_btn:hover{
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.2);
+    }
+    #sub_btn:hover{
         cursor: pointer;
         background-color: rgba(0,0,0,0.2);
     }
@@ -73,75 +77,85 @@
         height: 100px;
         text-align: center;
     }
-
+    footer{
+        display: flex;
+        justify-content: center;
+    }
 </style>
 <body>
-    <header>
-        <select name="" id="">
-            <option value="1">종류1</option>
-            <option value="2">종류2</option>
-            <option value="3">종류3</option>
-            <option value="4">종류4</option>
-        </select>
-        <i id="refresh_btn" class="fa-solid fa-arrows-rotate"></i>
-        <i id="sub_btn" class="fa-regular fa-bell"></i>
-    </header>
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <td>이미지</td>
-                    <td>상품</td>
-                    <td>현재가격</td>
-                    <td>저장가격</td>
-                </tr>
-            </thead>
-            <tbody class="item_list">
+<header>
+    <select name="" id="category">
+        <option value="0">전체</option>
+        <option value="1">CPU</option>
+        <option value="2">RAM</option>
+        <option value="3">메인보드</option>
+        <option value="4">그래픽카드(VGA)</option>
+        <option value="5">SSD</option>
+    </select>
+    <i id="refresh_btn" class="fa-solid fa-arrows-rotate"></i>
+    <i id="sub_btn" class="fa-regular fa-bell"></i>
+</header>
+<main>
+    <table>
+        <thead>
+        <tr>
+            <td>이미지</td>
+            <td>상품</td>
+            <td>현재가격</td>
+            <td>저장가격</td>
+        </tr>
+        </thead>
+        <tbody class="item_list">
+        </tbody>
+    </table>
+</main>
+<footer>
 
-            </tbody>
-        </table>
-    </main>
-    <footer>
-        footer
-    </footer>
+</footer>
 </body>
 </html>
 <script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
 <script>
     FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
+    setInterval( reFreshItem(),60000);
+    $("#category").change(()=>reFreshItem());
 
-    const callback = (isSubscribed) => {
-        // Do something...
-        console.log(isSubscribed);
-    };
-
-    $(".fa-regular").click(()=>{
+    //구독 버튼 클릭 이벤트
+    $("#sub_btn").click(()=>{
         FlareLane.getIsSubscribed((isSubscribed) => {
             const sub_tag = document.getElementById("sub_btn");
             if(isSubscribed){
-                FlareLane.setIsSubscribed(false, callback);
+                FlareLane.setIsSubscribed(false);
                 sub_tag.className = "fa-regular fa-bell-slash";
             }
             else{
-                FlareLane.setIsSubscribed(true, callback);
-                sub_tag.className = "fa-regular fa-bell-slash";
+                FlareLane.setIsSubscribed(true);
+                sub_tag.className = "fa-regular fa-bell";
             }
-            reFreshPage();
         });
     });
-    setInterval( reFreshPage(),60000);
-    function reFreshPage(){
+    //새로고침 버튼 클릭 이벤트
+    $("#refresh_btn").click(()=>reFreshItem());
+    //아이템 리스트 새로고침 메서드
+    function reFreshItem(){
         //현재 구독 상태를 가져와서 버튼을 바꿔준다.
         FlareLane.getIsSubscribed((isSubscribed) => {
             document.getElementById("sub_btn").className = isSubscribed?"fa-regular fa-bell":"fa-regular fa-bell-slash";
         });
         $.ajax({
-
-            type : "POST",
+            type : "GET",
+            data:{
+                category : $("#category").val(),
+                page :{
+                    page:0,
+                    size:10
+                }
+            },
             url : "/shop/getItems",
             success : function(res){
                 $(".item_list").empty();
-                res.dataList.forEach(item => {
+                res.forEach(item => {
+                    console.log(item)
                     var $itemBox = $(
                         '<tr class="item">\n' +
                         '<td class="item_img_con">\n' +
@@ -156,6 +170,20 @@
                         '</tr>');
                     $(".item_list").append($itemBox);
                 });
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                alert("통신 실패.")
+            }
+        });
+
+        $.ajax({
+            type : "GET",
+            data:{
+                category : $("#category").val()
+            },
+            url : "/shop/getItems",
+            success : function(res){
+
             },
             error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                 alert("통신 실패.")

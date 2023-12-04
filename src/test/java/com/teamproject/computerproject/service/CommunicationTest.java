@@ -10,12 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 public class CommunicationTest {
 
-    @Autowired
-    private  DataController dataController;
-    @Autowired
-    private  CommunicationService communicationService;
-    private ItemRepository itemRepository;
-
 
 
 }

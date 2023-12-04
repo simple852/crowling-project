@@ -30,23 +30,21 @@ public class ShopController {
 
     @GetMapping("/main")
     public void shop() {
+
     }
 
     @GetMapping("/getItems")
     public @ResponseBody List<ItemDto> getItems(@RequestParam("category") Integer categoryId, @PageableDefault(page = 0, size = 10)Pageable page) {
-
-
-
-
+        communicationService.getDatas(categoryId);
         return shopService.getItems(categoryId, page);
     }
 
 
-    @PostMapping("/jsoup")
-    public List<String> updateDataS(@RequestBody ParameterDto parameter){
-
-        return  communicationService.getDatas(parameter );
-    }
+//    @PostMapping("/jsoup")
+//    public List<String> updateDataS(@RequestBody ParameterDto parameter){
+//
+//        return  communicationService.getDatas(parameter );
+//    }
 
 
 
