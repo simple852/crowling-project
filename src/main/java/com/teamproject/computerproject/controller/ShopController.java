@@ -5,6 +5,7 @@ import com.teamproject.computerproject.dto.request.NotificationDto;
 import com.teamproject.computerproject.dto.request.ParameterDto;
 import com.teamproject.computerproject.repositery.ItemRepository;
 import com.teamproject.computerproject.service.CommunicationService;
+import com.teamproject.computerproject.service.ItemService;
 import com.teamproject.computerproject.service.NotificationService;
 import com.teamproject.computerproject.service.ShopService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ShopController {
     private final CommunicationService communicationService;
     private final NotificationService notificationService;
 
+    private final ItemService itemService;
     @GetMapping("/main")
     public void shop() {
 
@@ -38,10 +40,18 @@ public class ShopController {
 
     @GetMapping("/getItems")
     public @ResponseBody List<ItemDto> getItems(@RequestParam("category") Integer categoryId, @PageableDefault(page = 0, size = 10)Pageable page) {
-        communicationService.getDatas(categoryId);
+//        communicationService.getDatas(categoryId);
 
-        return shopService.getItems(categoryId, page);
+        return itemService.getItem(categoryId, page);
     }
+
+    @GetMapping("/reload")
+    public @ResponseBody String reload(@RequestParam("categoryId") Integer categoryId) {
+        communicationService.getDatas(categoryId);
+        return "success";
+    }
+
+
 
 
     @PostMapping("/notification")

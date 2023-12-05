@@ -15,9 +15,9 @@ public interface BackupDatumRepository extends JpaRepository<BackupDatum, Intege
 
     @Query("""
             select b from BackupDatum b
-            where  b.itemName = ?1 and b.itemAddress =?2
+            where  b.itemAddress =?1
             order by b.index desc limit 1""")
-    Optional<BackupDatum> findBackData(String itemName, String address);
+    Optional<BackupDatum> findByItemAddressOrderByIndexDesc(String address);
 
 
     BackupDatum findByIdAndItemAddressAndItemName(Integer id, String itemAddress, String itemName);

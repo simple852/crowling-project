@@ -210,10 +210,18 @@
 
     });
     //새로고침 버튼 클릭 이벤트
-    $("#refresh_btn").click(()=>{
-        alert("새로고침 되었습니다.");
-        reFreshItem(0);
-    });
+    $("#refresh_btn").click(()=> {
+        $.ajax({
+            type: "GET",
+            data: {
+                categoryId: $("#category").val(),
+            },
+            url: "/shop/reload",
+            error: function (XMLHttpRequest, textStatus, errorThrown) { // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                console.log("통신실패");
+            }
+        });
+    })
     //모달 버튼 클릭 이벤트(모달창)
     $(".model_btn").click(()=>{
         $(".model_box").css("display","block");

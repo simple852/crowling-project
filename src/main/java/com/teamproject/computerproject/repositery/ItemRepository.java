@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
+
     long countByCategoryId(Integer categoryId);
     @Transactional
     @Modifying
