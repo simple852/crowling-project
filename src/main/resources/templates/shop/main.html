@@ -89,9 +89,50 @@
     .red{
         color: red;
     }
+    .model_box{
+        position:absolute;
+        display: none;
+        justify-content: center;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .model_body{
+        position:absolute;
+        top:30%;
+        left:50%;
+        width:300px;
+        height:100px;
+
+        padding:40px;
+        text-align: center;
+        background-color: rgb(255,255,255);
+        border-radius:10px;
+        box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
+
+        transform:translate(-150px,-50px);
+    }
+    .model_input_con{
+        display: flex;
+        margin-bottom: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+    .model_text{
+        width: 80%;
+    }
+    .model_category{
+        width: 20%;
+    }
+    footer{
+        cursor: pointer;
+    }
 </style>
 <body>
 <header>
+    <input class="model_btn" type="button" value="추가">
     <select name="" id="category">
         <option value="0">전체</option>
         <option value="1">CPU</option>
@@ -120,16 +161,35 @@
 </main>
 <footer>
 </footer>
+<!--모달창-->
+<div class="model_box">
+    <div class="model_body">
+        <h3>추가</h3>
+        <div class="model_input_con">
+            <select name="" class="model_category">
+                <option value="0">전체</option>
+                <option value="1">CPU</option>
+                <option value="2">RAM</option>
+                <option value="3">메인보드</option>
+                <option value="4">그래픽카드(VGA)</option>
+                <option value="5">SSD</option>
+            </select>
+            <input  class="model_text" type="text">
+        </div>
+        <input class="model_insert_btn" type="button" value="추가">
+        <input class="model_close_btn" type="button" value="닫기">
+    </div>
+</div>
 </body>
 </html>
 <script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
 <script>
-
-
     FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
     FlareLane.setUserId($("#sessionId").val());
     setInterval( reFreshItem(0),60000);
 
+    ///////////////////////////////////////////////////////////////////////////
+    //이벤트
     $("#category").change(()=>reFreshItem(0));
 
     //구독 버튼 클릭 이벤트
@@ -154,6 +214,33 @@
         alert("새로고침 되었습니다.");
         reFreshItem(0);
     });
+    //모달 버튼 클릭 이벤트(모달창)
+    $(".model_btn").click(()=>{
+        $(".model_box").css("display","block");
+    });
+    //모달 종료 버튼 클릭
+    $(".model_close_btn").click(()=>{
+        $(".model_box").css("display","none");
+    });
+    $(".model_insert_btn").click(()=>{
+        $(".model_box").css("display","none");
+        $.ajax({
+            type : "POST",
+            data:{
+                categoryId : $(".model_category").val(),
+                itemAddress : $(".model_text").val(),
+            },
+            url : "/item/save",
+            success : function(res){
+
+            },
+            error : function(){
+            }
+        });
+    });
+    ///////////////////////////////////////////////////////////////////////////
+    //메서드
+
     //아이템 리스트 새로고침 메서드
     function reFreshItem(page){
         //현재 구독 상태를 가져와서 버튼을 바꿔준다.

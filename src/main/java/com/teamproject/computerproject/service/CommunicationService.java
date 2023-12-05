@@ -59,19 +59,19 @@ public class CommunicationService {
             return  getJsoupElements(list,category);
         }
     }
+
     @Async
-    @Scheduled(fixedDelay = 300000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 600000, initialDelay = 5000)
     public void scheduleUpdate(){
+        getDatas(0);
 
         List<BackupDatum> result = itemRepository.findAll()
                 .stream()
                 .map((element) -> modelMapper.map(element, BackupDatum.class))
                 .toList();
 
-
-        log.info(result.stream().map((element) -> modelMapper.map(element, BackupDatumDto.class)).toList().toString());
-        log.info("스케쥴링 시작");
         backupDatumRepository.saveAll(result);
+        getDatas(0);
     }
 
     public Connection getJsoupConnection(String url){
@@ -109,17 +109,16 @@ public class CommunicationService {
 
     }
 
-
     //검색할 element와 url을 가져온다.
     public List<ItemDto> getJsoupElements(List<String> url, Integer category ){
         List<Connection> conn = new ArrayList<>();
         List<ItemDto> saveList = new ArrayList<>();
-        List<String> nodes = new ArrayList<>();
 
 
         for (int i = 0; i < url.size(); i++) {
-            conn.add(getJsoupConnection(url.get(i)));
-            log.info(url.get(i));
+            conn.add(getJsoupConnection(url.get(i)).timeout(5000)
+
+            );
         }
 
         try{
@@ -157,36 +156,32 @@ public class CommunicationService {
                     String[] sortValue = price.split(" ");
                     price = sortValue[0].replace(",","");
                     Arrays.sort(sortValue);
-                    log.info("상품명 : "+title);
-                    log.info("상품설명 : "+content);
-                    log.info("상품가격 : "+price);
-                    log.info("상품주소 : "+ address);
-                    log.info("상품이미지 : "+ image);
-                    log.info("***********************************");
 
-
-                    ItemDto itemDto = new ItemDto();
-                    itemDto.setItemName(title);
-                    itemDto.setItemPrice(Integer.parseInt(price));
-                    itemDto.setItemContent(content);
-                    itemDto.setItemAddress(address);
-                    itemDto.setItemImage(image);
-
-
-                    saveList.add(itemDto);
+                    log.info("*****************************************");
+                    log.info("상품이름"+title);
+                    log.info("가격"+price);
+                    log.info("내용"+content);
+                    log.info("주소"+address);
+                    log.info("이미지"+image);
+                    log.info("*****************************************");
+                    saveList.add(putDto(title,content,price,address,image));
                 });
 
-           List<Item>  result =  saveList.stream().map((element) -> modelMapper.map(element, Item.class)).toList();
+            log.info("세이브 리스트"+saveList.toString());
+            List<Item>  result = saveList.stream().map((element) -> modelMapper.map(element, Item.class)).collect(Collectors.toList());
+           log.info("최종 db 넣기전");
+
 
            result.parallelStream().forEach(data->{
+               int backPrice=0;
+              if( modelMapper.map(backupDatumRepository.findBackData(data.getItemName(), data.getItemAddress()), BackupDatumDto.class).getItemPrice() == null){
+                  backPrice = 0;
+              }else{
+                   backPrice = modelMapper.map(backupDatumRepository.findBackData(data.getItemName(), data.getItemAddress()), BackupDatumDto.class).getItemPrice();
+              }
 
-               log.info("확인"+data.getItemName());
-              Integer backPrice =  modelMapper.map(backupDatumRepository.findBackData(data.getItemName()), BackupDatumDto.class).getItemPrice();
-               log.info( "뭐가 문제지?"+modelMapper.map(backupDatumRepository.findBackData(data.getItemName()), BackupDatumDto.class).toString());
                itemRepository.updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(data.getItemName(), data.getItemPrice(), data.getItemContent(), data.getItemImage(), data.getItemAddress(), data.getItemPrice() - backPrice);
            });
-
-
 
 
             LocalDateTime timestamp = LocalDateTime.now();
@@ -204,6 +199,17 @@ public class CommunicationService {
         }
     }
 
+
+    public ItemDto putDto(String title,String content ,String price,String address,String image){
+        ItemDto itemDto = new ItemDto();
+        itemDto.setItemName(title);
+        itemDto.setItemPrice(Integer.parseInt(price));
+        itemDto.setItemContent(content);
+        itemDto.setItemAddress(address);
+        itemDto.setItemImage(image);
+        log.info("dto에 담음");
+        return itemDto;
+    }
 
 
 }
