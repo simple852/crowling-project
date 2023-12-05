@@ -259,10 +259,9 @@
             type : "GET",
             data:{
                 category : $("#category").val(),
-                page :{
                     page:page,
                     size:10
-                }
+
             },
             url : "/shop/getItems",
             success : function(res){

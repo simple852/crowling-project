@@ -33,12 +33,5 @@ public class ItemService {
     }
 
 
-    public List<ItemDto> getItem(Integer categoryId, Pageable page) {
-        if(categoryId == 0){
-          return itemRepository.findAll(page).stream().map((element) -> modelMapper.map(element, ItemDto.class)).collect(Collectors.toList());
-        }else{
-           return itemRepository.findByCategoryId(categoryId).stream().map((element) -> modelMapper.map(element, ItemDto.class)).collect(Collectors.toList());
-        }
 
-    }
 }

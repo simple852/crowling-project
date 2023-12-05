@@ -178,7 +178,7 @@ public class CommunicationService {
            result.parallelStream().forEach(data->{
                int backPrice=0;
                log.info("db 처리중");
-            if(modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() != null && modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() == 0){
+            if(modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() == null && modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() == 0){
                 backPrice =modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice();
             }
 

@@ -42,7 +42,7 @@ public class ShopController {
     public @ResponseBody List<ItemDto> getItems(@RequestParam("category") Integer categoryId, @PageableDefault(page = 0, size = 10)Pageable page) {
 //        communicationService.getDatas(categoryId);
 
-        return itemService.getItem(categoryId, page);
+        return shopService.getItems(categoryId, page);
     }
 
     @GetMapping("/reload")
