@@ -16,8 +16,8 @@ public class MemberService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
-    public boolean login(String memberId, String memberPw){
-        return userRepository.existsByMemberIdAndMemberPw(memberId,memberPw);
+    public boolean login(UserDto userDto){
+        return userRepository.existsByMemberIdAndMemberPw(userDto.getMemberId(), userDto.getMemberPw());
     }
 
     public boolean joinMember(UserDto userDto) {

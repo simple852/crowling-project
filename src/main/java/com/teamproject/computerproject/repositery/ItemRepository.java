@@ -28,10 +28,13 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 
 
-    List<Item> findByCategoryIdOrderById(Integer categoryId, Pageable pageable);
+    List<Item> findByCategoryIdOrderByItemGapDesc(Integer categoryId, Pageable pageable);
 
 
     List<Item> findByCategoryId(Integer categoryId);
+
+    @Query("select all from Item as all order by abs(all.itemGap) desc, all.id desc")
+    List<Item> findAllOrder(Pageable page);
 
 
 

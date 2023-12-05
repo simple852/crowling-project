@@ -2,139 +2,25 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>메인</title>
 
+    <link rel="stylesheet" href="/css/style.css">
     <!--폰트 어썸-->
     <script src="https://kit.fontawesome.com/d19fdaba43.js" crossorigin="anonymous"></script>
     <!--jquery-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
-<style>
-    body{
-        margin: 0;
-        padding: 0;
-    }
-    header{
-        width: 1200px;
-        height: 50px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: right;
-    }
-    #refresh_btn:hover{
-        cursor: pointer;
-        background-color: rgba(0,0,0,0.2);
-    }
-    #sub_btn:hover{
-        cursor: pointer;
-        background-color: rgba(0,0,0,0.2);
-    }
-    header>i{
-        font-size: 2rem;
-        margin-top: 10px;
-        margin-left: 20px;
-    }
 
-    main{
-        width: 1200px;
-        margin: 0 auto;
-    }
-    table{
-        width: 100%;
-        margin: 0 auto;
-        border-top : 1px solid rgba(0,0,0,0.2);
-        border-bottom : 1px solid rgba(0,0,0,0.2);
-    }
-    thead{
-        text-align: center;
-    }
-    .item{
-        height: 140px;
-        margin-bottom: 15px;
-
-    }
-    .item_text_con{
-        width:60%;
-        height: 100px;
-    }
-    .item_content{
-        width: 100%;
-        font-size: 13px;
-        height: 100px;
-        word-break:break-all;
-    }
-    .item_img_con{
-        width: 100px;
-        height: 100px;
-    }
-    .item_img_con>img{
-        width: 100%;
-        height: 100%;
-    }
-    .item_now_price,.item_save_price{
-        width: 15%;
-        height: 100px;
-        text-align: center;
-    }
-    footer{
-        width: 1200px;
-        height: 50px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-    }
-    footer>a{
-        margin-right: 5px;
-    }
-    .blue{
-        color: blue;
-    }
-    .red{
-        color: red;
-    }
-    .model_box{
-        position:absolute;
-        display: none;
-        justify-content: center;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background-color: rgba(0,0,0,0.4);
-    }
-    .model_body{
-        position:absolute;
-        top:30%;
-        left:50%;
-        width:300px;
-        height:100px;
-
-        padding:40px;
-        text-align: center;
-        background-color: rgb(255,255,255);
-        border-radius:10px;
-        box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
-
-        transform:translate(-150px,-50px);
-    }
-    .model_input_con{
-        display: flex;
-        margin-bottom: 10px;
-        justify-content: center;
-        align-items: center;
-    }
-    .model_text{
-        width: 80%;
-    }
-    .model_category{
-        width: 20%;
-    }
-    footer{
-        cursor: pointer;
-    }
-</style>
 <body>
 <header>
+    <div>
+    <th:block th:if="${session.sessionId}">
+
+    </th:block>
+    <span th:text="${session.sessionId.getMemberId() + '님 환영합니다'}"></span>
+        <button><a th:href="@{/user/logout}">로그아웃</a></button>
+    </div>
+<div>
     <input class="model_btn" type="button" value="추가">
     <select name="" id="category">
         <option value="0">전체</option>
@@ -147,6 +33,7 @@
     <input th:value="${session.sessionId}" type="hidden" id ="sessionId">
     <i id="refresh_btn" class="fa-solid fa-arrows-rotate"></i>
     <i id="sub_btn" class="fa-regular fa-bell"></i>
+</div>
 </header>
 <main>
     <table>
@@ -158,7 +45,7 @@
             <td>세일</td>
         </tr>
         </thead>
-        <tbody class="item_list">
+        <tbody class="item_list" style="">
         </tbody>
     </table>
 </main>

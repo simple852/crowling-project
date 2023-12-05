@@ -1,102 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-</head>
-<style>
-    body{
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(to right, #efefef, #e0ffff, #affafa, #9bfafa);
-    }
-    form{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <link rel="stylesheet" href="/css/login.css">
 
-        width: 800px;
-        height: 500px;
-        margin: 0 auto;
-        padding: 0;
-        display: flex;
-        transform: translate(0, 30%);
-        background-color: white;
 
-        border-radius: 10%;
-        box-shadow: 4px 4px 2px #8f8f8f;
-        overflow: hidden;
 
-    }
-    .login_con{
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-right: 1px solid rgba(0,0,0,0.2);
-    }
-    .login_con input{
-        width: 100%;
-        height: 25px;
-    }
-    .login_btn_con{
-        width: 100%;
-        height: 25px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-
-    }
-    .login_btn_con > button{
-        width:100px;
-        height: 30px;
-    }
-    .sns_con{
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-</style>
 <body>
-<div>
-    <main>
-        <form action="/login" method="post">
-            <div class="login_con">
-                <label>ID : <input type="text" name ="memberId"></label><br>
-                <label>PW : <input type="text" name ="memberPw"></label><br>
-                <div class="login_btn_con">
-                    <button>로그인</button>
-                    <button>회원가입</button>
+
+
+<div class="section">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                    <h6 class="mb-0 pb-3">
+                        <span>Log In </span>
+                        <span>Sign Up</span></h6>
+                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                    <label for="reg-log"></label>
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <form  id ="post1" action="/user/login" method="post">
+                                            <h4 class="mb-4 pb-3">Log In</h4>
+                                            <div class="form-group">
+                                                <input type="text" name="memberId" class="form-style" placeholder="Your ID" id="logemail" autocomplete="off">
+                                                <i class="input-icon uil uil-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="memberPw" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt"></i>
+                                            </div>
+                                            <button type="submit" class="btn mt-4" onclick="">Login</button>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="card-back">
+                                <div class="center-wrap">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Sign Up</h4>
+                                        <form  name="joinForm" id ="post2" method="post" action="/user/join">
+
+                                            <div class="form-group mt-2">
+                                                <input type="text" name="joinId" class="form-style" placeholder="Your ID" id="logid" autocomplete="off">
+                                                <label  id ="blankText2" style="display: none"></label><br>
+                                                <i class="input-icon uil uil-at" id="id_icon"></i>
+                                                <input type="button" class="btn mt-4" value="중복확인" id="checkId" onclick="">
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="joinPw" class="form-style" placeholder="Your Password" id="logpass1" autocomplete="off">
+                                                <i class="input-icon uil uil-lock-alt" id="pw_icon"></i>
+                                            </div>
+                                            <button class="btn mt-4" id="join_submit" onclick="">회원가입</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="sns_con">
-                <button>sns 로그인</button><br>
-                <button>sns 로그인</button>
-            </div>
-        </form>
-    </main>
+        </div>
+    </div>
 </div>
-
 </body>
 </html>
-<script src="https://cdn.flarelane.com/WebSDK.js" charset="UTF-8"></script>
 
 
-<script>
-    //초기화 구독 알림이 뜬다
-    //나중에 로그인후 로 다른페이지에 넣을 예정
 
-    FlareLane.initialize({ projectId: "a8b75707-136f-4fc3-ab47-57801d352e5f" });
+<script src="https://code.jquery.com/jquery-3.4.1.js" defer></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 
-    FlareLane.getIsSubscribed((isSubscribed) => {
-        //구독이 안되있으면
-        if(!isSubscribed){
-            //디바이스 아이디 를 가져오고 db에 저장
-            //
-            FlareLane.getDeviceId((deviceId) => {
-                console.log(deviceId);
-            });
-        }
-    });
-
-</script>

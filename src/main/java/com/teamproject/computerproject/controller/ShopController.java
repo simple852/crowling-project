@@ -33,11 +33,11 @@ public class ShopController {
     private final NotificationService notificationService;
 
     private final ItemService itemService;
+
     @GetMapping("/main")
-    public void shop() {
-
+    public String moveMain(){
+        return "/shop/main";
     }
-
     @GetMapping("/getItems")
     public @ResponseBody List<ItemDto> getItems(@RequestParam("category") Integer categoryId, @PageableDefault(page = 0, size = 10)Pageable page) {
 //        communicationService.getDatas(categoryId);

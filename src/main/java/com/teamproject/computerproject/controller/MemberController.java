@@ -10,40 +10,42 @@ import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @Controller
-@RequestMapping("/")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
 
     @PostMapping("/login")
-    public String loginMember(@RequestParam("memberId") String memberId, @RequestParam("memberPw") String memberPw, HttpSession httpSession)
+    public String loginMember(UserDto userDto, HttpSession httpSession)
     {
-       if(memberService.login(memberId,memberPw)){
-           httpSession.setAttribute("sessionId",memberId);
+        log.info(userDto.getMemberId());
+       if(memberService.login(userDto)){
+           httpSession.setAttribute("sessionId",userDto);
            log.info(httpSession.getAttribute("sessionId"));
             return "shop/main";
        }else{
-           return "redirect:/main";
+           return "redirect:/";
        }
 
     }
 
 
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession){
+        httpSession.invalidate();
+        return "redirect:/main";
+    }
+
+
     @PostMapping("/join")
-    public String joinMember(UserDto userDto){
+    public String joinMember(@RequestParam("joinId") String memberId, @RequestParam("joinPw") String memberPw){
+        UserDto userDto = UserDto.builder().memberId(memberId).memberPw(memberPw).build();
+        memberService.joinMember(userDto);
         return "redirect:/main";
     }
 
-    @GetMapping("/main")
-    public String main(){
-        return "login";
-    }
 
-    @GetMapping("/")
-    public String main2(){
-        return "redirect:/main";
-    }
 
 
 }

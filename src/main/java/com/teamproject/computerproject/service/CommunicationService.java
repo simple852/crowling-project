@@ -76,10 +76,13 @@ public class CommunicationService {
         backupDatumRepository.saveAll(result);
 
         List<Item> items = itemRepository.findAll();
-        items.stream().map((element) -> modelMapper.map(element, ItemDto.class)).collect(Collectors.toList()).parallelStream().forEach(data->{
+        items.stream().map((element) -> modelMapper.map(element, ItemDto.class)).toList().stream().forEach(data->{
 
-            NotificationDto notificationDto = NotificationDto.builder().title("파격 할인!!!!").body(data.getItemName() + "이 할인 중 입니다!").itemUrl(data.getItemAddress()).build();
-            notificationService.send_notification(notificationDto);
+            if(data.getItemGap() < 0){
+                NotificationDto notificationDto = NotificationDto.builder().title("파격 할인!!!!").body(data.getItemName() + "이 할인 중 입니다!").itemUrl(data.getItemAddress()).build();
+                notificationService.send_notification(notificationDto);
+            }
+
         });
 
 
@@ -180,7 +183,7 @@ public class CommunicationService {
                 });
 
             log.info("세이브 리스트"+saveList.toString());
-            List<Item>  result = saveList.stream().map((element) -> modelMapper.map(element, Item.class)).collect(Collectors.toList());
+            List<Item>  result = saveList.stream().map((element) -> modelMapper.map(element, Item.class)).toList();
            log.info("최종 db 넣기전");
 
 

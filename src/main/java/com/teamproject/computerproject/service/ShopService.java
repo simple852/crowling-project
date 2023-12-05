@@ -23,14 +23,14 @@ public class ShopService {
         Long count ;
         if(categoryId == 0){
             count = totalCountItem(categoryId);
-            dataList =  itemRepository.findAll(page)
+            dataList =  itemRepository.findAllOrder(page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
             dataList.get(0).setTotalItemCount(count);
 
         }else{
             count = totalCountItem(categoryId);
-            dataList =  itemRepository.findByCategoryIdOrderById(categoryId, page)
+            dataList =  itemRepository.findByCategoryIdOrderByItemGapDesc(categoryId, page)
                     .stream().map((element) -> modelMapper.map(element, ItemDto.class))
                     .toList();
 
