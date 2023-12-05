@@ -22,7 +22,8 @@ public class BackupDatum {
     @Size(max = 255)
     @Column(name = "item_name")
     private String itemName;
-    @ColumnDefault("0") //default 0
+
+    @ColumnDefault(value = "0") //default 0
     @Column(name = "item_price")
     private Integer itemPrice;
 

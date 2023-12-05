@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
+    List<Item> findByItemGap(Integer itemGap);
 
     long countByCategoryId(Integer categoryId);
     @Transactional

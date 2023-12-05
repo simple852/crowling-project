@@ -5,6 +5,7 @@ import com.teamproject.computerproject.domain.Item;
 import com.teamproject.computerproject.domain.ItemImage;
 import com.teamproject.computerproject.dto.BackupDatumDto;
 import com.teamproject.computerproject.dto.ItemDto;
+import com.teamproject.computerproject.dto.request.NotificationDto;
 import com.teamproject.computerproject.dto.request.ParameterDto;
 import com.teamproject.computerproject.repositery.BackupDatumRepository;
 import com.teamproject.computerproject.repositery.CategoryRepository;
@@ -44,6 +45,7 @@ public class CommunicationService {
     private final CategoryRepository categoryRepository;
     private final BackupDatumRepository backupDatumRepository;
 
+    private final NotificationService notificationService;
     String titleClass = "span.title";
     String contentClass= "u";
     String priceClass="em.prc_c";
@@ -71,8 +73,15 @@ public class CommunicationService {
                 .stream()
                 .map((element) -> modelMapper.map(element, BackupDatum.class))
                 .toList();
-
         backupDatumRepository.saveAll(result);
+
+        List<Item> items = itemRepository.findAll();
+        items.stream().map((element) -> modelMapper.map(element, ItemDto.class)).collect(Collectors.toList()).parallelStream().forEach(data->{
+
+            NotificationDto notificationDto = NotificationDto.builder().title("파격 할인!!!!").body(data.getItemName() + "이 할인 중 입니다!").itemUrl(data.getItemAddress()).build();
+            notificationService.send_notification(notificationDto);
+        });
+
 
     }
 
@@ -176,13 +185,16 @@ public class CommunicationService {
 
 
            result.parallelStream().forEach(data->{
-               int backPrice=0;
+               Integer backPrice=0;
                log.info("db 처리중");
-            if(modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() == null && modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice() == 0){
-                backPrice =modelMapper.map(backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()), BackupDatumDto.class).getItemPrice();
-            }
+             if( backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()).get().getItemPrice() == null){
+                    backPrice= 0;
+             }else{
+             backPrice= backupDatumRepository.findByItemAddressOrderByIndexDesc(data.getItemAddress()).get().getItemPrice();
+             }
 
-           log.info(String.valueOf( "전 가격 : "+ backPrice));
+
+
            itemRepository.updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(data.getItemName(), data.getItemPrice(), data.getItemContent(), data.getItemImage(), data.getItemAddress(), data.getItemPrice() - backPrice);
            });
 

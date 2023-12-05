@@ -30,19 +30,19 @@ public class NotificationService {
 
         JsonObject jsonObject = new JsonObject();
         JsonArray targetIdsArray = new JsonArray();
-        //세그먼트 구독된 모든 기기에 전송할때
-//        jsonObject.addProperty("targetType", "segment");
-//        targetIdsArray.add("9d1ccc8c-e7e4-439b-bf2e-cb0ffafcffb9");
+//        세그먼트 구독된 모든 기기에 전송할때
+        jsonObject.addProperty("targetType", "segment");
+        targetIdsArray.add("9d1ccc8c-e7e4-439b-bf2e-cb0ffafcffb9");
         //특정 기기에 전송할때
 //        jsonObject.addProperty("targetType", "device");
 
-        if(!notificationDto.getToken().isEmpty() && !Objects.equals(notificationDto.getUserId(), "userId")){
-            jsonObject.addProperty("targetType", notificationDto.getType());
-            targetIdsArray.add(notificationDto.getToken());
-        }else{
-            jsonObject.addProperty("targetType", "userId");
-            targetIdsArray.add(notificationDto.getUserId());
-        }
+//        if(!notificationDto.getToken().isEmpty() && !Objects.equals(notificationDto.getUserId(), "userId")){
+//            jsonObject.addProperty("targetType", notificationDto.getType());
+//            targetIdsArray.add(notificationDto.getToken());
+//        }else{
+//            jsonObject.addProperty("targetType", "userId");
+//            targetIdsArray.add(notificationDto.getUserId());
+//        }
 
 
         jsonObject.add("targetIds", targetIdsArray);
