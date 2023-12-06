@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -41,5 +44,8 @@ public class BackupDatum {
     @Size(max = 255)
     @Column(name = "item_image")
     private String itemImage;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
 }

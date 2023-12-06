@@ -23,7 +23,7 @@ public class MemberController {
        if(memberService.login(userDto)){
            httpSession.setAttribute("sessionId",userDto);
            log.info(httpSession.getAttribute("sessionId"));
-            return "shop/main";
+            return "redirect:/shop/main";
        }else{
            return "redirect:/";
        }

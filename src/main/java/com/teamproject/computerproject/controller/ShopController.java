@@ -41,6 +41,7 @@ public class ShopController {
     @GetMapping("/getItems")
     public @ResponseBody List<ItemDto> getItems(@RequestParam("category") Integer categoryId, @PageableDefault(page = 0, size = 10)Pageable page) {
 //        communicationService.getDatas(categoryId);
+        log.info(page);
 
         return shopService.getItems(categoryId, page);
     }

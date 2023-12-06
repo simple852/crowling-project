@@ -12,6 +12,10 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
+    @Transactional
+    @Modifying
+    @Query("update Item i set i.itemGap = ?1 where i.itemAddress = ?2")
+    int updateItemGapByItemAddress(Integer itemGap, String itemAddress);
     List<Item> findByItemGap(Integer itemGap);
 
     long countByCategoryId(Integer categoryId);

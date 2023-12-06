@@ -1,6 +1,10 @@
 body{
     margin: 0;
     padding: 0;
+    background-color: white;
+    color:black;
+    font-size: 20px;
+    font-weight: bold;
 }
 header{
     width: 1200px;
@@ -16,10 +20,11 @@ header>div>span{
     font-size: 30px;
     font-weight: bold ;
 }
-header>div>*{
+header>div *{
     font-size: 20px;
     height: 45px;
     font-weight: bold ;
+
 }
 #refresh_btn:hover{
     cursor: pointer;
@@ -51,15 +56,15 @@ thead{
 }
 .item{
     height: 140px;
-    border : black solid 5px;
+
     margin-bottom: 15px;
 }
 .item_text_con{
-    width:60%;
+    /*width:60%;*/
     height: 100px;
 }
 .item_content{
-    width: 100%;
+    /*width: 100%;*/
     font-size: 13px;
     height: 100px;
     word-break:break-all;
@@ -73,7 +78,7 @@ thead{
     height: 100%;
 }
 .item_now_price,.item_save_price{
-    width: 15%;
+    /*width: 15%;*/
     height: 100px;
     text-align: center;
 }
@@ -132,4 +137,14 @@ footer>a{
 }
 footer{
     cursor: pointer;
+}
+a{
+    text-decoration-line: none;
+    text-decoration-color:black ;
+}
+a:visited {
+    color : black;
+}
+a:link {
+    color : black;
 }
