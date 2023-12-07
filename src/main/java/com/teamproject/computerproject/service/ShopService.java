@@ -18,25 +18,15 @@ public class ShopService {
     private final ItemRepository itemRepository;
     private final ModelMapper modelMapper;
 
+
     public List<ItemDto> getItems(Integer categoryId, Pageable page) {
         List<ItemDto> dataList;
-        Long count ;
-        if(categoryId == 0){
-            count = totalCountItem(categoryId);
-            dataList =  itemRepository.findAllOrder(page)
-                    .stream().map((element) -> modelMapper.map(element, ItemDto.class))
-                    .toList();
-            dataList.get(0).setTotalItemCount(count);
-
-        }else{
-            count = totalCountItem(categoryId);
-            dataList =  itemRepository.findByCategoryIdOrderByItemGapDesc(categoryId, page)
-                    .stream().map((element) -> modelMapper.map(element, ItemDto.class))
-                    .toList();
-
-
-            dataList.get(0).setTotalItemCount(count);
-        }
+        Long count = 0L;
+        count = totalCountItem(categoryId);
+        dataList = (categoryId == 0?itemRepository.findAllOrder(page):itemRepository.findByCategoryIdOrderByItemGapDesc(categoryId, page))
+                .stream().map((element) -> modelMapper.map(element, ItemDto.class))
+                .toList();
+        dataList.get(0).setTotalItemCount(count);
         return dataList;
     }
 

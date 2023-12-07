@@ -22,16 +22,16 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Transactional
     @Modifying
     @Query("""
-            update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3, i.itemImage = ?4 , i.itemGap = ?6
+            update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3, i.itemImage = ?4
             where i.itemAddress = ?5""")
-    int updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(String itemName, Integer itemPrice, String itemContent, String itemImage, String itemAddress,Integer gapPrice);
+    int updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(String itemName, Integer itemPrice, String itemContent, String itemImage, String itemAddress);
     @Transactional
     @Modifying
     @Query("update Item i set i.itemName = ?1, i.itemPrice = ?2, i.itemContent = ?3 , i.itemImage = ?4 where i.itemAddress = ?4")
     int updateItemNameAndItemPriceAndItemContentByItemAddress(String itemName, Integer itemPrice, String itemContent,String itemImage, String itemAddress);
 
 
-
+    @Query("select all from Item as all where all.categoryId = ?1 order by abs(all.itemGap) desc, all.id desc")
     List<Item> findByCategoryIdOrderByItemGapDesc(Integer categoryId, Pageable pageable);
 
 

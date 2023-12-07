@@ -2,33 +2,27 @@ package com.teamproject.computerproject.service;
 
 import com.teamproject.computerproject.domain.BackupDatum;
 import com.teamproject.computerproject.domain.Item;
-import com.teamproject.computerproject.domain.ItemImage;
-import com.teamproject.computerproject.dto.BackupDatumDto;
+
 import com.teamproject.computerproject.dto.ItemDto;
 import com.teamproject.computerproject.dto.request.NotificationDto;
-import com.teamproject.computerproject.dto.request.ParameterDto;
 import com.teamproject.computerproject.repositery.BackupDatumRepository;
 import com.teamproject.computerproject.repositery.CategoryRepository;
 import com.teamproject.computerproject.repositery.ItemImageRepository;
 import com.teamproject.computerproject.repositery.ItemRepository;
-import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Future;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
-import java.sql.Timestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -105,7 +99,13 @@ public class CommunicationService {
         List<Item> items = itemRepository.findAll();
         items.stream().map((element) -> modelMapper.map(element, ItemDto.class)).toList().stream().forEach(data->{
 
-            if(data.getItemGap() < 0){
+            int gapPrice= 0;
+            if(data.getItemGap() != null){
+
+                gapPrice = data.getItemPrice();
+
+            }
+            if(gapPrice < 5000 ){
                 NotificationDto notificationDto = NotificationDto.builder().title("파격 할인!!!!").body(data.getItemName() + "이 할인 중 입니다!").itemUrl(data.getItemAddress()).build();
                 notificationService.send_notification(notificationDto);
             }
@@ -136,9 +136,7 @@ public class CommunicationService {
         for (ItemDto data:dataList) {
             list.add(data.getItemAddress());
         }
-
         return list;
-
     }
 
     //크롤링 웹url 연결 부분 성공시 jsoup.connect 반환
@@ -180,47 +178,21 @@ public class CommunicationService {
                     String address = "";
                     String image = null;
 
-                    // 전역변수에 설정해놓은 각 필요 태그.class이름을 전달받고 값을 가져온다
+                    // 전역변수에 설정해놓은 각 필요 <태그>.class이름을 전달받고 값을 가져온다
                     try {
                         title = item.get().select(titleClass).text();
+                        content = item.get().select(contentClass).text();
+                        price = item.get().select(priceClass).text();
+                        address =item.get().location();
+                        image = Objects.requireNonNull(item.get().getElementById(imageClass)).attr("src");
                     } catch (IOException e){
                         log.info("상품명 에러" + e);
                     }
-                    try {
-                        content = item.get().select(contentClass).text();
-                    } catch (IOException e) {
-                        log.info("컨텐츠 에러" + e);
-                    }
-                    try {
-                        price = item.get().select(priceClass).text();
-                    } catch (IOException e) {
-                        log.info("가격 에러" + e);
-                    }
-                    try {
-                        address =item.get().location();
-                    } catch (IOException e) {
-                        log.info("uri 에러" + e);
-                    }
-                    try {
-                        image = Objects.requireNonNull(item.get().getElementById(imageClass)).attr("src");
-                    } catch (IOException e) {
-                        log.info("이미지 에러" + e);
-                    }
-
                     //가격 같은경우 여러개가 들고 와지기 때문에 split로 나눈다
                     String[] sortValue = price.split(" ");
-
                     // 여러개중 가장 먼저 나온 0번인덱스 데이터를 가져온다
                     price = sortValue[0].replace(",","");
                     Arrays.sort(sortValue);
-
-                    log.info("*****************************************");
-                    log.info("상품이름"+title);
-                    log.info("가격"+price);
-                    log.info("내용"+content);
-                    log.info("주소"+address);
-                    log.info("이미지"+image);
-                    log.info("*****************************************");
                     //가져온 데이터를 dto에 담는 메서드에 담아주고 그 객체를 savelist에 추가한다
                     saveList.add(putDto(title,content,price,address,image));
                 });
@@ -240,7 +212,13 @@ public class CommunicationService {
                 categoryRepository.updateUpdateTimeBy(timestamp);
             }
 
+            result.parallelStream().forEach(data->{
+                itemRepository.updateItemNameAndItemPriceAndItemContentAndItemImageByItemAddress(data.getItemName(),data.getItemPrice(),data.getItemContent(),data.getItemImage(),data.getItemAddress());
 
+            });
+
+            log.info("************************************************************");
+            log.info("크롤링 완료");
             return result.stream().map((element) -> modelMapper.map(element, ItemDto.class)).collect(Collectors.toList());
 
         }catch (Exception e){
@@ -258,7 +236,7 @@ public class CommunicationService {
         itemDto.setItemContent(content);
         itemDto.setItemAddress(address);
         itemDto.setItemImage(image);
-        log.info("dto에 담음");
+        log.info(title+" dto에 담음");
         return itemDto;
     }
 

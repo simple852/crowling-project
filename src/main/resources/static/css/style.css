@@ -41,8 +41,9 @@ header>i{
 }
 
 main{
-    width: 1200px;
+    width: 70%;
     margin: 0 auto;
+
 }
 table{
     width: 100%;
@@ -55,15 +56,20 @@ thead{
 
 }
 .item{
+    border: #1f2029 1px solid;
     height: 140px;
 
     margin-bottom: 15px;
+
 }
 .item_text_con{
     /*width:60%;*/
     height: 100px;
 }
 .item_content{
+    text-overflow: ellipsis;
+    /*white-space: nowrap;*/
+    overflow: hidden;
     /*width: 100%;*/
     font-size: 13px;
     height: 100px;

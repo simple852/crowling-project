@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,7 +15,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "backup_data")
-public class BackupDatum {
+
+public class BackupDatum  extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "index", nullable = false)
@@ -45,6 +48,9 @@ public class BackupDatum {
     @Column(name = "item_image")
     private String itemImage;
 
+
+
+    @CreatedDate
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 

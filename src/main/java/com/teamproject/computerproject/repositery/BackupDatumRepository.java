@@ -16,8 +16,6 @@ public interface BackupDatumRepository extends JpaRepository<BackupDatum, Intege
     Optional<BackupDatum> findByCreatedDateAndItemAddressOrderByItemPriceDesc(LocalDate createdDate, String itemAddress);
     @Query("select b from BackupDatum b where b.createdDate = ?1 order by b.itemPrice DESC  limit  1")
     Optional<BackupDatum> findByCreatedDateOrderByItemPriceDesc(LocalDate createdDate);
-    BackupDatum findFirstByIdOrderByIndexDesc(Integer id);
-
 
     @Query("""
             select b from BackupDatum b
@@ -26,6 +24,5 @@ public interface BackupDatumRepository extends JpaRepository<BackupDatum, Intege
     Optional<BackupDatum> findByItemAddressOrderByIndexDesc(String address);
 
 
-    BackupDatum findByIdAndItemAddressAndItemName(Integer id, String itemAddress, String itemName);
-    List<BackupDatum> findByIdOrderByIndexDesc(Integer id);
+
 }
